@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>About</title>
+<style>
+  :root{
+    /* ===== 色・大きさ（ここを触れば微調整が簡単） ===== */
+    --bg-cream: #f7f5ef;           /* 背景の基調色（右側グラデと馴染むやわらかい生成り） */
+    --ink: #333333;
+    --accent: #ff7e00;
+
+    /* 右上：三角（黄系） */
+    --tri-color: #ffd25a;          /* お好みで黄色味を調整 */
+    --tri-alpha: 0.28;
+    --tri-w: 46vw;
+    --tri-h: 36vh;
+    --tri-right: -8%;
+    --tri-top: 6%;
+    --tri-rotate: -6deg;
+
+    /* 左下：六角形（青系） */
+    --hex-color: #a9c7df;
+    --hex-alpha: 0.24;
+    --hex-size: 44vw;
+    --hex-left: -14%;
+    --hex-bottom: -10%;
+    --hex-rotate: -8deg;
+
+    /* コンテンツ幅（中央三分の一イメージ） */
+    --content-max: 640px;
+
+    /* ヘッダー帯 */
+    --header-h: 64px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{
+    font-family: system-ui, -apple-system, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    color: var(--ink);
+    background: var(--bg-cream);
+    overflow: hidden; /* スクロールなし想定 */
+    min-height: 100vh;
+  }
+
+  /* ===== 共通ヘッダー（PORTFOLIO + ハンバーガー） ===== */
+  .site-header{
+    position: sticky; top: 0; z-index: 99;
+    height: var(--header-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px 0 20px;
+    background: rgba(247,245,239,.86);
+    backdrop-filter: saturate(120%) blur(6px);
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  .brand{ font-weight: 800; letter-spacing: .04em; }
+  .hamburger{
+    appearance: none; background: transparent; border: 0; cursor: pointer;
+    width: 40px; height: 40px; border-radius: 8px; display: grid; place-items: center;
+  }
+  .hamburger:focus-visible{ outline: 2px solid #999; outline-offset: 2px; }
+  .hamburger .bars{ position: relative; width: 22px; height: 2px; background: var(--ink); }
+  .hamburger .bars::before, .hamburger .bars::after{
+    content:""; position: absolute; left: 0; width: 22px; height: 2px; background: var(--ink);
+  }
+  .hamburger .bars::before{ top: -7px; } .hamburger .bars::after{ top: 7px; }
+
+  .menu{
+    position: absolute; top: calc(var(--header-h) + 8px); right: 12px;
+    background: #fff; border: 1px solid rgba(0,0,0,.08);
+    border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,.12);
+    padding: 6px; min-width: 180px; display: none;
+  }
+  .menu.open{ display:block; }
+  .menu a{
+    display:block; padding:10px 12px; border-radius:8px;
+    color:inherit; text-decoration:none; font-weight:500;
+  }
+  .menu a:hover{ background: rgba(0,0,0,.04); }
+
+  /* ===== ヒーロー領域（背景グラデ＋シェイプ） ===== */
+  .about-hero{
+    position: relative;
+    height: calc(100vh - var(--header-h));
+    display: grid; place-items: center;
+    overflow: hidden;
+    isolation: isolate; /* 合成のにじみ防止 */
+  }
+
+  /* 右側にゆるいハイライトが落ちる背景グラデーション */
+  .about-hero::before{
+    content:"";
+    position:absolute; inset:-20%;
+    background:
+      radial-gradient(70% 60% at 70% 20%, rgba(255,255,255,.55), transparent 60%),
+      linear-gradient(135deg, rgba(255,255,255,.30) 0%, rgba(0,0,0,0) 40%);
+    z-index: 0; pointer-events: none;
+  }
+
+  .shape{ position: absolute; z-index: 0; pointer-events: none; }
+
+  /* 右上：三角（黄系） */
+  .tri{
+    width: var(--tri-w); height: var(--tri-h);
+    right: var(--tri-right); top: var(--tri-top);
+    background: color-mix(in srgb, var(--tri-color) calc(var(--tri-alpha)*100%), transparent);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    transform: rotate(var(--tri-rotate));
+    filter: drop-shadow(0 8px 24px rgba(255,180,50,.10));
+  }
+
+  /* 左下：六角形（青系） */
+  .hex{
+    width: var(--hex-size); height: var(--hex-size);
+    left: var(--hex-left); bottom: var(--hex-bottom);
+    background: color-mix(in srgb, var(--hex-color) calc(var(--hex-alpha)*100%), transparent);
+    clip-path: polygon(
+      25% 0%, 75% 0%,
+      100% 50%,
+      75% 100%, 25% 100%,
+      0% 50%
+    );
+    transform: rotate(var(--hex-rotate));
+    filter: drop-shadow(0 10px 28px rgba(80,110,140,.08));
+  }
+
+  /* ===== 中央コンテンツ（中央三分の一イメージ） ===== */
+  .about-card{
+    position: relative; z-index: 2;
+    width: min(var(--content-max), 90vw);
+    text-align: center;
+  }
+  h1{
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    font-weight: 800; letter-spacing: .02em;
+    margin-bottom: 16px;
+  }
+  .avatar{
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    object-fit: cover; object-position: center;
+    background: linear-gradient(#eee, #ddd);
+    display: inline-block;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    margin-bottom: 14px;
+  }
+  .intro{
+    font-size: clamp(0.98rem, 1.6vw, 1.05rem);
+    line-height: 1.85;
+    max-width: 56ch;
+    margin: 0 auto;
+    opacity: .95;
+  }
+
+  /* スマホ補正（サイズが大き過ぎる場合の緩和） */
+  @media (max-width: 720px){
+    :root{
+      --tri-w: 70vw; --tri-h: 28vh; --tri-right: -20%; --tri-top: 12%;
+      --hex-size: 70vw; --hex-left: -24%; --hex-bottom: -18%;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 共通ヘッダー -->
+  <header class="site-header">
+    <div class="brand" aria-label="Site title">PORTFOLIO</div>
+    <button class="hamburger" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="globalMenu" aria-label="Open menu">
+      <span class="bars" aria-hidden="true"></span>
+    </button>
+    <nav class="menu" id="globalMenu" role="menu" aria-label="Site navigation">
+      <a href="about.html" role="menuitem">About</a>
+      <a href="contents.html" role="menuitem">Contents</a>
+      <a href="contact.html" role="menuitem">Contact</a>
+    </nav>
+  </header>
+
+  <main class="about-hero">
+    <!-- 背景シェイプ -->
+    <div class="shape tri"></div>
+    <div class="shape hex"></div>
+
+    <!-- 中央コンテンツ -->
+    <section class="about-card">
+      <h1>ABOUT</h1>
+      <!-- ここにご自身のアイコン画像を置き換えてください -->
+      <img class="avatar" src="images/avatar.jpg" alt="プロフィール写真">
+      <p class="intro">
+        ここに自己紹介テキストを入れてください。専門分野、得意領域、制作スタイル、使用ツールなど。
+        文章量は 3〜6 行程度に収めると、中央のまとまり感と可読性が上がります。
+      </p>
+    </section>
+  </main>
+
+<script>
+  // ハンバーガー開閉
+  const btn = document.getElementById('menuBtn');
+  const menu = document.getElementById('globalMenu');
+  function closeMenu(){ menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+  btn.addEventListener('click', ()=>{
+    const open = menu.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', (e)=>{
+    if(!menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeMenu();
+  });
+</script>
+</body>
+</html>
