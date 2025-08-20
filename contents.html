@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contents</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root{
+    /* 共通トーン（表紙 / contact / about と合わせた生成り＋オレンジ系） */
+    --bg:#fcfaf2;
+    --ink:#333;
+    --accent:#ff7e00;
+
+    /* 中央カラム幅：3/5 ≒ 60% を目安に */
+    --layout-max: 1200px;
+    --col-center: 3fr;   /* 中央 */
+    --col-side:   1fr;   /* 左右 */
+    --gap: 28px;
+
+    /* サイドカードの彩度控えめカラー */
+    --amber:  #ffe08b;
+    --blue:   #a9c7df;
+    --coral:  #ffb8a1;
+
+    --header-h:64px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:system-ui,-apple-system,"Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    min-height:100vh;
+  }
+
+  /* ===== 共通ヘッダー（全ページ帯） ===== */
+  .site-header{
+    position:sticky; top:0; z-index:99;
+    height:var(--header-h);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 16px 0 20px;
+    background:rgba(252,250,242,.86);
+    backdrop-filter:saturate(120%) blur(6px);
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .brand{font-weight:800; letter-spacing:.04em;}
+  .hamburger{
+    appearance:none; background:transparent; border:0; cursor:pointer;
+    width:40px; height:40px; border-radius:8px; display:grid; place-items:center;
+  }
+  .hamburger:focus-visible{outline:2px solid #999; outline-offset:2px;}
+  .hamburger .bars{position:relative; width:22px; height:2px; background:var(--ink);}
+  .hamburger .bars::before,.hamburger .bars::after{
+    content:""; position:absolute; left:0; width:22px; height:2px; background:var(--ink);
+  }
+  .hamburger .bars::before{top:-7px} .hamburger .bars::after{top:7px}
+  .menu{
+    position:absolute; top:calc(var(--header-h) + 8px); right:12px;
+    background:#fff; border:1px solid rgba(0,0,0,.08);
+    border-radius:12px; box-shadow:0 12px 32px rgba(0,0,0,.12);
+    padding:6px; min-width:180px; display:none;
+  }
+  .menu.open{display:block}
+  .menu a{display:block; padding:10px 12px; border-radius:8px; color:inherit; text-decoration:none; font-weight:500;}
+  .menu a:hover{background:rgba(0,0,0,.04)}
+
+  /* ===== レイアウト（左右サイド + 中央） ===== */
+  main{
+    max-width:var(--layout-max);
+    margin:0 auto;
+    padding:24px 16px 80px;
+    display:grid;
+    grid-template-columns: var(--col-side) var(--col-center) var(--col-side);
+    gap: var(--gap);
+  }
+
+  /* 中央：上部アコーディオン（スクラッチ経緯） */
+  details.scr-overview{
+    grid-column: 2 / 3;
+    background:#fff;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:16px;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+    padding:12px 16px;
+  }
+  details.scr-overview > summary{
+    cursor:pointer; font-weight:700; list-style:none; outline:none;
+  }
+  details.scr-overview > summary::-webkit-details-marker{display:none}
+  details.scr-overview[open]{box-shadow:0 10px 28px rgba(0,0,0,.08)}
+  details.scr-overview .inner{
+    margin-top:10px; line-height:1.8; opacity:.95;
+  }
+
+  /* 中央：プロジェクト縦並び（3つ） */
+  .center-col{ grid-column: 2 / 3; display:flex; flex-direction:column; gap:36px; }
+  .project{
+    background:#fff;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:16px;
+    box-shadow:0 10px 28px rgba(0,0,0,.07);
+    padding:18px 18px 22px;
+  }
+  .project h2{
+    font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+    margin-bottom:12px; letter-spacing:.02em;
+  }
+
+  /* 動画/サムネ枠（今はダミー。画像や動画に差し替えOK） */
+  .video-frame{
+    position:relative;
+    background:linear-gradient(135deg,#f0eee7,#e9e5da);
+    border-radius:12px;
+    aspect-ratio: 16 / 9;
+    display:grid; place-items:center;
+    overflow:hidden; border:1px solid rgba(0,0,0,.08);
+  }
+  .video-frame .play{
+    width:72px; height:72px; border-radius:50%;
+    background:#fff; display:grid; place-items:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);
+  }
+  .video-frame .play::before{
+    content:""; display:block; width:0; height:0;
+    border-left:16px solid var(--ink);
+    border-top:10px solid transparent; border-bottom:10px solid transparent;
+    margin-left:4px;
+  }
+  .project .desc{ margin-top:12px; line-height:1.8; opacity:.95; }
+
+  /* ===== サイド：スクラッチ作品カード（左右にバラバラ配置） ===== */
+  .side-col{ position:relative; }
+  .side-stack{ position:sticky; top:calc(var(--header-h) + 10px); }
+  .side-card{
+    position:relative;
+    background:#fff; border:1px solid rgba(0,0,0,.08);
+    border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.06);
+    padding:12px; margin-bottom:22px;
+    transform: translateY(0); /* JSで遅延スクロール演出 */
+    will-change: transform;
+    overflow:hidden;
+  }
+  .side-card .gif{
+    width:100%; aspect-ratio: 1 / 1; border-radius:10px; object-fit:cover; background:#eee;
+    display:block; margin-bottom:8px;
+  }
+  .side-card .cap{ font-weight:700; margin-bottom:4px; }
+  .side-card .txt{ font-size:.95rem; line-height:1.7; opacity:.92; }
+
+  /* サイドのカラフルな図形（カードの背面に置く） */
+  .side-card::before{
+    content:""; position:absolute; inset:auto auto -24px -24px;
+    width:160px; height:160px; border-radius:18px; transform:rotate(-12deg);
+    opacity:.5; z-index:-1;
+    background:var(--amber);
+  }
+  .side-card.theme-blue::before{ background:var(--blue); border-radius:50%; width:220px; height:220px; inset:auto -40px -32px auto; transform:rotate(0deg); opacity:.45;}
+  .side-card.theme-coral::before{ background:var(--coral); width:200px; height:140px; border-radius:34px; inset:-34px auto auto -34px; transform:rotate(10deg); opacity:.4;}
+
+  /* 反応しやすい余白 */
+  .side-card:hover{ box-shadow:0 10px 28px rgba(0,0,0,.1); transform:translateY(-2px); transition:transform .12s ease, box-shadow .2s ease; }
+
+  /* レスポンシブ：狭い画面では縦一列に崩す */
+  @media (max-width: 900px){
+    main{ grid-template-columns: 1fr; }
+    details.scr-overview, .center-col{ grid-column: 1 / -1; }
+    .side-col{ display:none; } /* スマホはまずは非表示（必要なら下部に並べる版も作れます） */
+  }
+</style>
+</head>
+<body>
+
+  <!-- 共通ヘッダー -->
+  <header class="site-header">
+    <div class="brand">PORTFOLIO</div>
+    <button class="hamburger" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="globalMenu" aria-label="Open menu">
+      <span class="bars" aria-hidden="true"></span>
+    </button>
+    <nav class="menu" id="globalMenu" role="menu" aria-label="Site navigation">
+      <a href="about.html" role="menuitem">About</a>
+      <a href="contents.html" role="menuitem">Contents</a>
+      <a href="contact.html" role="menuitem">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 左サイド（1 & 3 を左に） -->
+    <aside class="side-col">
+      <div class="side-stack">
+        <article class="side-card theme-amber">
+          <img class="gif" src="images/scratch1.gif" alt="Scratchゲーム1のGIF">
+          <div class="cap">ゲーム画面①</div>
+          <p class="txt">ここに簡単な説明を入れます。プレイの目的／操作方法など。</p>
+        </article>
+
+        <article class="side-card theme-blue">
+          <img class="gif" src="images/scratch3.gif" alt="Scratchゲーム3のGIF">
+          <div class="cap">ゲーム画面③</div>
+          <p class="txt">ここに簡単な説明を入れます。制作の工夫や見どころなど。</p>
+        </article>
+      </div>
+    </aside>
+
+    <!-- 中央（3/5相当） -->
+    <section class="center-col">
+      <!-- 上部：スクラッチ作品について（プルダウン） -->
+      <details class="scr-overview">
+        <summary>サイドのスクラッチ作品について</summary>
+        <div class="inner">
+          ここに制作の経緯やねらい、学びを書きます。例：<br>
+          ・授業の課題としてプロトタイプを作成／改良を重ねた<br>
+          ・操作の直感性やUIの一貫性を重視した設計 など
+        </div>
+      </details>
+
+      <!-- ① ラーメン制作ゲーム -->
+      <article class="project">
+        <h2>ラーメン制作ゲーム</h2>
+        <div class="video-frame">
+          <!-- 画像や動画を差し替え：<img src="..." alt=""> または <video controls src="..."></video> -->
+          <div class="play" aria-hidden="true"></div>
+        </div>
+        <p class="desc">作品の説明テキスト。こだわり・システム・使用技術など。</p>
+      </article>
+
+      <!-- ② どこつぶアプリ -->
+      <article class="project">
+        <h2>どこつぶアプリ（授業）</h2>
+        <div class="video-frame"><div class="play" aria-hidden="true"></div></div>
+        <p class="desc">作品の説明テキスト。役割分担や学んだ点、リンクなど。</p>
+      </article>
+
+      <!-- ③ Todoリストアプリ -->
+      <article class="project">
+        <h2>Todoリストアプリ</h2>
+        <div class="video-frame"><div class="play" aria-hidden="true"></div></div>
+        <p class="desc">作品の説明テキスト。UI／状態管理／ストレージなど。</p>
+      </article>
+    </section>
+
+    <!-- 右サイド（2 を右に） -->
+    <aside class="side-col">
+      <div class="side-stack">
+        <article class="side-card theme-coral">
+          <img class="gif" src="images/scratch2.gif" alt="Scratchゲーム2のGIF">
+          <div class="cap">ゲーム画面②</div>
+          <p class="txt">ここに簡単な説明を入れます。制作背景や操作のポイント。</p>
+        </article>
+      </div>
+    </aside>
+  </main>
+
+<script>
+  // ハンバーガー
+  const btn = document.getElementById('menuBtn');
+  const menu = document.getElementById('globalMenu');
+  function closeMenu(){ menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+  btn.addEventListener('click', ()=>{
+    const open = menu.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', (e)=>{ if(!menu.contains(e.target) && !btn.contains(e.target)) closeMenu(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
+
+  // ===== サイドの「中央より遅い」スクロール演出 =====
+  // スクロール量に対して 0.3〜0.45倍だけY移動させる
+  const sideCards = document.querySelectorAll('.side-card');
+  let lastY = 0, ticking = false;
+  function onScroll(){
+    lastY = window.scrollY || window.pageYOffset;
+    if(!ticking){
+      window.requestAnimationFrame(()=>{
+        sideCards.forEach((card, i)=>{
+          const factor = i % 2 ? 0.45 : 0.3; // 交互に少し係数を変えるとリズムが出る
+          card.style.transform = `translateY(${lastY * factor}px)`;
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll(); // 初期位置反映
+</script>
+</body>
+</html>

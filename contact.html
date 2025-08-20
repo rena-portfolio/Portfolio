@@ -3,70 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="common.css">
 <title>Contact</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   :root{
-    --bg:#fcfaf2;         /* 生成り(表紙と統一) */
-    --ink:#333;
-    --accent:#ff7e00;     /* ボタン色(表紙と統一) */
-
     --circle-grey:#c6baad;                 /* 左のグレー系(少し暖かい) */
     --circle-orange:rgba(255,183,77,.28);  /* 右の薄オレンジ(透明度あり) */
-
-    --header-h:64px;
   }
 
-  *{margin:0;padding:0;box-sizing:border-box}
   body{
-    font-family: system-ui, -apple-system, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
-    background:var(--bg);
-    color:var(--ink);
     min-height:100vh;
   }
-
-  /* ===== 共通ヘッダー帯 ===== */
-  .site-header{
-    position:sticky; top:0; z-index:99;
-    height:var(--header-h);
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 16px 0 20px;
-    background:rgba(252,250,242,.86);
-    backdrop-filter:saturate(120%) blur(6px);
-    border-bottom:1px solid rgba(0,0,0,.06);
-  }
-  .brand{
-    font-weight:800; letter-spacing:.04em;
-  }
-  .hamburger{
-    appearance:none; background:transparent; border:0; cursor:pointer;
-    width:40px; height:40px; border-radius:8px;
-    display:grid; place-items:center;
-  }
-  .hamburger:focus-visible{ outline:2px solid #999; outline-offset:2px; }
-  .hamburger .bars{
-    position:relative; width:22px; height:2px; background:var(--ink);
-  }
-  .hamburger .bars::before,
-  .hamburger .bars::after{
-    content:""; position:absolute; left:0; width:22px; height:2px; background:var(--ink);
-  }
-  .hamburger .bars::before{ top:-7px; }
-  .hamburger .bars::after{ top:7px; }
-
-  /* ドロップダウンメニュー */
-  .menu{
-    position:absolute; top:calc(var(--header-h) + 8px); right:12px;
-    background:#fff; border:1px solid rgba(0,0,0,.08);
-    border-radius:12px; box-shadow:0 12px 32px rgba(0,0,0,.12);
-    padding:6px; min-width:180px; display:none;
-  }
-  .menu.open{ display:block; }
-  .menu a{
-    display:block; padding:10px 12px; border-radius:8px;
-    color:inherit; text-decoration:none; font-weight:500;
-  }
-  .menu a:hover{ background:rgba(0,0,0,.04); }
 
   /* ===== ページ本体 ===== */
   main{
@@ -135,6 +83,14 @@
     .bg-circle.left{ left:-200px; bottom:-120px; width:420px; height:420px; opacity:.75; }
     .bg-circle.right{ right:-160px; width:340px; height:340px; opacity:.26; }
   }
+
+  .form-notice{
+  margin-top:12px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:rgba(0,0,0,.04);
+  font-size:.95rem;
+}
 </style>
 </head>
 <body>
@@ -182,6 +138,7 @@
         </div>
         <button type="submit">Send</button>
       </form>
+      <p class="form-notice" id="formNotice" role="status" aria-live="polite" style="display:none;"></p>
     </section>
   </main>
 
@@ -203,6 +160,31 @@
   });
   document.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape') closeMenu();
+  });
+
+  //送信ボタンを押した後
+  const form = document.getElementById('contactForm');
+  const notice = document.getElementById('formNotice');
+  const sendBtn = document.getElementById('sendBtn');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault(); // 実際の送信を止める
+
+    // ボタンの軽い演出（任意）
+    sendBtn.disabled = true;
+    const originalText = sendBtn.textContent;
+    sendBtn.textContent = 'Sending...';
+    setTimeout(() => {
+      sendBtn.textContent = originalText;
+      sendBtn.disabled = false;
+    }, 600);
+
+    // メッセージ表示
+    notice.textContent = '送信テストモードです。実際には送信されていません。';
+    notice.style.display = 'block';
+
+    // 入力内容をクリア（不要なら消してOK）
+    form.reset();
   });
 </script>
 </body>
