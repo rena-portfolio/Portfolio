@@ -4,284 +4,306 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Contents</title>
+<link rel="stylesheet" href="common.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   :root{
-    /* 共通トーン（表紙 / contact / about と合わせた生成り＋オレンジ系） */
-    --bg:#fcfaf2;
-    --ink:#333;
-    --accent:#ff7e00;
+    --bg:#fcfaf2; --ink:#333; --accent:#ff7e00; --header-h:64px;
+    --max:1400px; --gap:28px;
+    /* 下段 3カラム幅（好みで調整OK） */
+    --col-left:1.1fr;   /* 説明 */
+    --col-mid:  2.4fr;  /* メイン */
+    --col-right:1.3fr;  /* Scratch */
+  }
+  body{ background:var(--bg); color:var(--ink); }
 
-    /* 中央カラム幅：3/5 ≒ 60% を目安に */
-    --layout-max: 1200px;
-    --col-center: 3fr;   /* 中央 */
-    --col-side:   1fr;   /* 左右 */
-    --gap: 28px;
-
-    /* サイドカードの彩度控えめカラー */
-    --amber:  #ffe08b;
-    --blue:   #a9c7df;
-    --coral:  #ffb8a1;
-
-    --header-h:64px;
-  }
-
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{
-    font-family:system-ui,-apple-system,"Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
-    color:var(--ink);
-    background:var(--bg);
-    min-height:100vh;
-  }
-
-  /* ===== 共通ヘッダー（全ページ帯） ===== */
-  .site-header{
-    position:sticky; top:0; z-index:99;
-    height:var(--header-h);
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 16px 0 20px;
-    background:rgba(252,250,242,.86);
-    backdrop-filter:saturate(120%) blur(6px);
-    border-bottom:1px solid rgba(0,0,0,.06);
-  }
-  .brand{font-weight:800; letter-spacing:.04em;}
-  .hamburger{
-    appearance:none; background:transparent; border:0; cursor:pointer;
-    width:40px; height:40px; border-radius:8px; display:grid; place-items:center;
-  }
-  .hamburger:focus-visible{outline:2px solid #999; outline-offset:2px;}
-  .hamburger .bars{position:relative; width:22px; height:2px; background:var(--ink);}
-  .hamburger .bars::before,.hamburger .bars::after{
-    content:""; position:absolute; left:0; width:22px; height:2px; background:var(--ink);
-  }
-  .hamburger .bars::before{top:-7px} .hamburger .bars::after{top:7px}
-  .menu{
-    position:absolute; top:calc(var(--header-h) + 8px); right:12px;
-    background:#fff; border:1px solid rgba(0,0,0,.08);
-    border-radius:12px; box-shadow:0 12px 32px rgba(0,0,0,.12);
-    padding:6px; min-width:180px; display:none;
-  }
-  .menu.open{display:block}
-  .menu a{display:block; padding:10px 12px; border-radius:8px; color:inherit; text-decoration:none; font-weight:500;}
-  .menu a:hover{background:rgba(0,0,0,.04)}
-
-  /* ===== レイアウト（左右サイド + 中央） ===== */
-  main{
-    max-width:var(--layout-max);
-    margin:0 auto;
-    padding:24px 16px 80px;
-    display:grid;
-    grid-template-columns: var(--col-side) var(--col-center) var(--col-side);
-    gap: var(--gap);
-  }
-
-  /* 中央：上部アコーディオン（スクラッチ経緯） */
-  details.scr-overview{
-    grid-column: 2 / 3;
-    background:#fff;
-    border:1px solid rgba(0,0,0,.08);
-    border-radius:16px;
-    box-shadow:0 8px 24px rgba(0,0,0,.06);
-    padding:12px 16px;
-  }
-  details.scr-overview > summary{
-    cursor:pointer; font-weight:700; list-style:none; outline:none;
-  }
-  details.scr-overview > summary::-webkit-details-marker{display:none}
-  details.scr-overview[open]{box-shadow:0 10px 28px rgba(0,0,0,.08)}
-  details.scr-overview .inner{
-    margin-top:10px; line-height:1.8; opacity:.95;
-  }
-
-  /* 中央：プロジェクト縦並び（3つ） */
-  .center-col{ grid-column: 2 / 3; display:flex; flex-direction:column; gap:36px; }
-  .project{
-    background:#fff;
-    border:1px solid rgba(0,0,0,.08);
-    border-radius:16px;
-    box-shadow:0 10px 28px rgba(0,0,0,.07);
-    padding:18px 18px 22px;
-  }
-  .project h2{
-    font-size: clamp(1.2rem, 2.6vw, 1.6rem);
-    margin-bottom:12px; letter-spacing:.02em;
-  }
-
-  /* 動画/サムネ枠（今はダミー。画像や動画に差し替えOK） */
-  .video-frame{
+  /* ===== 上段：イラスト帯（画面上1/3） ===== */
+  .hero-illust{
     position:relative;
+    height:32vh; min-height:260px;
+    display:flex; align-items:flex-end;
+    isolation:isolate; overflow:hidden;
+  }
+  /* 左上のCONTENTS */
+  .hero-illust .title{
+    position:absolute; left:5vw; top:18%;
+    font-weight:800; letter-spacing:.08em; font-size:clamp(1.2rem,2.8vw,1.6rem);
+    opacity:.9;
+  }
+  /* 背景のグレー図形 */
+  .hero-illust::before,
+  .hero-illust::after{
+    content:""; position:absolute; inset:auto; z-index:-1; pointer-events:none;
+    background:rgba(0,0,0,.04);
+  }
+  .hero-illust::before{
+    width:44vw; height:44vw; right:-18vw; top:-10vw; border-radius:50%;
+    filter:blur(1px);
+  }
+  .hero-illust::after{
+    width:38vw; height:28vw; left:-16vw; bottom:-10vw; border-radius:32px;
+    transform:rotate(-8deg);
+  }
+  /* 右からセンターまでくる帯 */
+  .illust-band{
+    margin-left:auto; margin-right:clamp(16px,6vw,80px);
+    background:#fff; border:1px solid rgba(0,0,0,.08);
+    border-radius:16px; box-shadow:0 10px 28px rgba(0,0,0,.07);
+    padding:14px; min-width:min(46vw,720px); max-width:820px;
+  }
+  .illust-row{ display:flex; align-items:center; gap:10px; }
+  .illust-row img{
+    width:120px; height:80px; object-fit:cover; background:#eee; border-radius:10px;
+  }
+  .illust-row a.more{
+    margin-left:auto; text-decoration:none; font-weight:800; letter-spacing:.06em;
+    color:#222; display:inline-flex; align-items:center; gap:10px;
+    border-bottom:2px solid rgba(0,0,0,.2); padding-bottom:4px;
+  }
+  .illust-row a.more:hover{ color:var(--accent); border-bottom-color:var(--accent); }
+  .illust-row a.more i{ font-size:1.1em; }
+
+  /* ===== 下段レイアウト（画面下2/3） ===== */
+  .stage{
+    max-width:var(--max); margin:16px auto 90px; padding:0 16px;
+    display:grid; gap:var(--gap);
+    grid-template-columns: var(--col-left) var(--col-mid) var(--col-right);
+    align-items:start;
+    min-height: 58vh;
+  }
+
+  /* 左：説明（作品ごとに連動切替） */
+  .left{ position:relative; min-height:480px; }
+  .info{
+    position:absolute; inset:0;
+    background:#fff; border:1px solid rgba(0,0,0,.08);
+    border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,.06);
+    padding:18px 20px; line-height:1.95; opacity:0; transform:translateY(8px);
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .info.active{ opacity:1; transform:none; }
+  .info h3{ margin-bottom:8px; font-size:1.08rem; }
+
+  /* 中央：メインカード（上下ボタンは外側・薄い） */
+  .mid{ position:relative; min-height:480px; }
+  .proj{
+    position:absolute; inset:0;
+    background:#fff; border:1px solid rgba(0,0,0,.08);
+    border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.08);
+    padding:18px; display:flex; flex-direction:column; gap:12px;
+    opacity:0; pointer-events:none; transform:translateY(8px);
+    transition:opacity .28s ease, transform .28s ease;
+  }
+  .proj.active{ opacity:1; pointer-events:auto; transform:none; }
+  .proj h2{ font-size:clamp(1.2rem,2.6vw,1.6rem); }
+  .frame{
+    aspect-ratio:16/9; border-radius:12px; overflow:hidden;
+    border:1px solid rgba(0,0,0,.08);
     background:linear-gradient(135deg,#f0eee7,#e9e5da);
-    border-radius:12px;
-    aspect-ratio: 16 / 9;
     display:grid; place-items:center;
-    overflow:hidden; border:1px solid rgba(0,0,0,.08);
   }
-  .video-frame .play{
-    width:72px; height:72px; border-radius:50%;
-    background:#fff; display:grid; place-items:center;
-    box-shadow:0 8px 24px rgba(0,0,0,.12);
+  .desc{ line-height:1.9; opacity:.95; }
+  .btn-outline{
+    align-self:flex-start; display:inline-block; padding:.55rem 1.1rem;
+    border:2px solid var(--accent); color:var(--accent);
+    border-radius:24px; text-decoration:none; font-weight:700;
+    transition:background .15s, color .15s, transform .12s;
   }
-  .video-frame .play::before{
-    content:""; display:block; width:0; height:0;
-    border-left:16px solid var(--ink);
-    border-top:10px solid transparent; border-bottom:10px solid transparent;
-    margin-left:4px;
-  }
-  .project .desc{ margin-top:12px; line-height:1.8; opacity:.95; }
+  .btn-outline:hover{ background:var(--accent); color:#fff; transform:translateY(-1px); }
 
-  /* ===== サイド：スクラッチ作品カード（左右にバラバラ配置） ===== */
-  .side-col{ position:relative; }
-  .side-stack{ position:sticky; top:calc(var(--header-h) + 10px); }
-  .side-card{
-    position:relative;
+  /* 上下の薄いボタン（外側） */
+  .vbtn{
+    position:absolute; left:50%; translate:-50% 0;
+    width:34px; height:34px; border-radius:999px;
+    display:grid; place-items:center;
+    background:rgba(0,0,0,.10); color:#fff; cursor:pointer;
+    backdrop-filter:blur(3px); user-select:none; z-index:3;
+  }
+  .vbtn.up{ top:-18px; } .vbtn.down{ bottom:-18px; }
+  .vbtn span{ transform:translateY(-1px); }
+
+  /* 右：Scratchカードの自動ループ＋左右の薄い▶ */
+  .right{ position:relative; min-height:480px; }
+  .scroller{
+    position:absolute; inset:0;
     background:#fff; border:1px solid rgba(0,0,0,.08);
-    border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.06);
-    padding:12px; margin-bottom:22px;
-    transform: translateY(0); /* JSで遅延スクロール演出 */
-    will-change: transform;
+    border-radius:16px; box-shadow:0 10px 28px rgba(0,0,0,.07);
     overflow:hidden;
   }
-  .side-card .gif{
-    width:100%; aspect-ratio: 1 / 1; border-radius:10px; object-fit:cover; background:#eee;
-    display:block; margin-bottom:8px;
+  .s-card{
+    position:absolute; inset:12px; border-radius:12px; overflow:hidden;
+    background:#eee; opacity:0; transition:opacity .45s ease;
   }
-  .side-card .cap{ font-weight:700; margin-bottom:4px; }
-  .side-card .txt{ font-size:.95rem; line-height:1.7; opacity:.92; }
-
-  /* サイドのカラフルな図形（カードの背面に置く） */
-  .side-card::before{
-    content:""; position:absolute; inset:auto auto -24px -24px;
-    width:160px; height:160px; border-radius:18px; transform:rotate(-12deg);
-    opacity:.5; z-index:-1;
-    background:var(--amber);
+  .s-card.active{ opacity:1; }
+  .s-card img{ width:100%; height:100%; object-fit:cover; display:block; }
+  /* 3種のカード枠（前回のニュアンスを踏襲） */
+  .s-card.theme-amber{ box-shadow:inset 0 0 0 10px rgba(255,224,139,.55); }
+  .s-card.theme-blue { box-shadow:inset 0 0 0 10px rgba(169,199,223,.55); }
+  .s-card.theme-coral{ box-shadow:inset 0 0 0 10px rgba(255,184,161,.55); }
+  .s-caption{
+    position:absolute; left:14px; right:14px; bottom:14px;
+    background:rgba(255,255,255,.88); border:1px solid rgba(0,0,0,.06);
+    border-radius:10px; padding:8px 10px; font-weight:700;
   }
-  .side-card.theme-blue::before{ background:var(--blue); border-radius:50%; width:220px; height:220px; inset:auto -40px -32px auto; transform:rotate(0deg); opacity:.45;}
-  .side-card.theme-coral::before{ background:var(--coral); width:200px; height:140px; border-radius:34px; inset:-34px auto auto -34px; transform:rotate(10deg); opacity:.4;}
+  /* 薄い▶ボタン（スクラッチだけ） */
+  .hbtn{
+    position:absolute; top:50%; translate:0 -50%;
+    width:28px; height:28px; display:grid; place-items:center;
+    background:rgba(0,0,0,.06); color:#333; border-radius:999px; cursor:pointer;
+    user-select:none; z-index:3;
+  }
+  .hbtn.prev{ left:-14px; } .hbtn.next{ right:-14px; }
+  .hbtn span{ font-size:.9rem; }
 
-  /* 反応しやすい余白 */
-  .side-card:hover{ box-shadow:0 10px 28px rgba(0,0,0,.1); transform:translateY(-2px); transition:transform .12s ease, box-shadow .2s ease; }
-
-  /* レスポンシブ：狭い画面では縦一列に崩す */
-  @media (max-width: 900px){
-    main{ grid-template-columns: 1fr; }
-    details.scr-overview, .center-col{ grid-column: 1 / -1; }
-    .side-col{ display:none; } /* スマホはまずは非表示（必要なら下部に並べる版も作れます） */
+  /* レスポンシブ */
+  @media (max-width:1100px){
+    .hero-illust{ height:28vh; }
+    .illust-row img{ width:92px; height:64px; }
+    .stage{ grid-template-columns: 1fr; }
+    .left,.mid,.right{ min-height:420px; }
+    .hbtn.prev{ left:6px } .hbtn.next{ right:6px }
+    .vbtn.up{ top:6px } .vbtn.down{ bottom:6px }
   }
 </style>
 </head>
 <body>
 
-  <!-- 共通ヘッダー -->
-  <header class="site-header">
-    <div class="brand">PORTFOLIO</div>
-    <button class="hamburger" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="globalMenu" aria-label="Open menu">
-      <span class="bars" aria-hidden="true"></span>
-    </button>
-    <nav class="menu" id="globalMenu" role="menu" aria-label="Site navigation">
-      <a href="about.html" role="menuitem">About</a>
-      <a href="contents.html" role="menuitem">Contents</a>
-      <a href="contact.html" role="menuitem">Contact</a>
-    </nav>
-  </header>
+<header class="site-header">
+  <div class="brand">PORTFOLIO</div>
+  <button class="hamburger" id="menuBtn" aria-expanded="false" aria-controls="globalMenu" aria-label="Open menu">
+    <span class="bars"></span>
+  </button>
+  <nav class="menu" id="globalMenu" aria-label="Site navigation">
+    <a href="about.html">About</a>
+    <a href="contents.html">Contents</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
 
-  <main>
-    <!-- 左サイド（1 & 3 を左に） -->
-    <aside class="side-col">
-      <div class="side-stack">
-        <article class="side-card theme-amber">
-          <img class="gif" src="images/scratch1.gif" alt="Scratchゲーム1のGIF">
-          <div class="cap">ゲーム画面①</div>
-          <p class="txt">ここに簡単な説明を入れます。プレイの目的／操作方法など。</p>
-        </article>
+<!-- 上段：イラスト帯 -->
+<section class="hero-illust">
+  <div class="title">CONTENTS</div>
+  <div class="illust-band">
+    <div class="illust-row">
+      <img src="images/illust1.jpg" alt=""><img src="images/illust2.jpg" alt=""><img src="images/illust3.jpg" alt="">
+      <a class="more" href="YOUR_ILLUST_PORTFOLIO_URL" target="_blank" rel="noopener">
+        ILLUSTRATION PORTFOLIO <i class="fa-solid fa-angle-right"></i>
+      </a>
+    </div>
+  </div>
+</section>
 
-        <article class="side-card theme-blue">
-          <img class="gif" src="images/scratch3.gif" alt="Scratchゲーム3のGIF">
-          <div class="cap">ゲーム画面③</div>
-          <p class="txt">ここに簡単な説明を入れます。制作の工夫や見どころなど。</p>
-        </article>
-      </div>
-    </aside>
+<!-- 下段：3カラム -->
+<section class="stage">
+  <!-- 左：説明（連動切替） -->
+  <aside class="left">
+    <article class="info active" data-idx="0">
+      <h3>ラーメン制作ゲーム</h3>
+      <p>素早い試作から完成度までを段階的に。Scratch→Unity→Javaで同テーマを実装し、操作感・表現・拡張性を比較できる構成にしました。</p>
+    </article>
+    <article class="info" data-idx="1">
+      <h3>どこつぶアプリ（授業）</h3>
+      <p>地図×投稿の学内SNS。役割分担・コードレビュー・UI設計を通じて、チーム開発のプロセスを学びました。</p>
+    </article>
+    <article class="info" data-idx="2">
+      <h3>Todoリストアプリ</h3>
+      <p>状態管理と永続化（LocalStorage）を中心に設計。フィルタ・並べ替え・アクセシビリティを段階追加で育てています。</p>
+    </article>
+  </aside>
 
-    <!-- 中央（3/5相当） -->
-    <section class="center-col">
-      <!-- 上部：スクラッチ作品について（プルダウン） -->
-      <details class="scr-overview">
-        <summary>サイドのスクラッチ作品について</summary>
-        <div class="inner">
-          ここに制作の経緯やねらい、学びを書きます。例：<br>
-          ・授業の課題としてプロトタイプを作成／改良を重ねた<br>
-          ・操作の直感性やUIの一貫性を重視した設計 など
-        </div>
-      </details>
+  <!-- 中央：メイン（上下ボタンは外側） -->
+  <section class="mid" id="mid">
+    <button class="vbtn up"   aria-label="前へ"><span>▲</span></button>
+    <button class="vbtn down" aria-label="次へ"><span>▼</span></button>
 
-      <!-- ① ラーメン制作ゲーム -->
-      <article class="project">
-        <h2>ラーメン制作ゲーム</h2>
-        <div class="video-frame">
-          <!-- 画像や動画を差し替え：<img src="..." alt=""> または <video controls src="..."></video> -->
-          <div class="play" aria-hidden="true"></div>
-        </div>
-        <p class="desc">作品の説明テキスト。こだわり・システム・使用技術など。</p>
-      </article>
+    <article class="proj active" data-idx="0">
+      <h2>ラーメン制作ゲーム</h2>
+      <div class="frame"><!-- 画像/動画を入れる --></div>
+      <p class="desc">操作性・演出・ロジックを段階的に設計。詳細ページで3実装を比較できます。</p>
+      <a class="btn-outline" href="ramen.html">詳細を見る</a>
+    </article>
 
-      <!-- ② どこつぶアプリ -->
-      <article class="project">
-        <h2>どこつぶアプリ（授業）</h2>
-        <div class="video-frame"><div class="play" aria-hidden="true"></div></div>
-        <p class="desc">作品の説明テキスト。役割分担や学んだ点、リンクなど。</p>
-      </article>
+    <article class="proj" data-idx="1">
+      <h2>どこつぶアプリ（授業）</h2>
+      <div class="frame"></div>
+      <p class="desc">地図UIと投稿の連携、簡易モデレーション、通知などを検討。</p>
+    </article>
 
-      <!-- ③ Todoリストアプリ -->
-      <article class="project">
-        <h2>Todoリストアプリ</h2>
-        <div class="video-frame"><div class="play" aria-hidden="true"></div></div>
-        <p class="desc">作品の説明テキスト。UI／状態管理／ストレージなど。</p>
-      </article>
-    </section>
+    <article class="proj" data-idx="2">
+      <h2>Todoリストアプリ</h2>
+      <div class="frame"></div>
+      <p class="desc">絞り込み機能、ドラッグ並べ替え、保存復元などを実装予定。</p>
+    </article>
+  </section>
 
-    <!-- 右サイド（2 を右に） -->
-    <aside class="side-col">
-      <div class="side-stack">
-        <article class="side-card theme-coral">
-          <img class="gif" src="images/scratch2.gif" alt="Scratchゲーム2のGIF">
-          <div class="cap">ゲーム画面②</div>
-          <p class="txt">ここに簡単な説明を入れます。制作背景や操作のポイント。</p>
-        </article>
-      </div>
-    </aside>
-  </main>
+  <!-- 右：Scratch自動ループ＋薄い▶ボタン＋固定説明 -->
+  <aside class="right">
+    <div class="scroller" aria-label="Scratch作品スライドショー">
+      <button class="hbtn prev" aria-label="前"><span>◀</span></button>
+      <button class="hbtn next" aria-label="次"><span>▶</span></button>
+
+      <div class="s-card theme-amber active"><img src="images/scratch1.gif" alt=""><div class="s-caption">ゲーム画面①</div></div>
+      <div class="s-card theme-blue"><img src="images/scratch2.gif" alt=""><div class="s-caption">ゲーム画面②</div></div>
+      <div class="s-card theme-coral"><img src="images/scratch3.gif" alt=""><div class="s-caption">ゲーム画面③</div></div>
+    </div>
+
+    <div class="info" style="position:static; opacity:1; transform:none; margin-top:12px;">
+      <h3>Scratch制作について</h3>
+      <p>アイデア検証に最適な環境として活用。直感操作と即時フィードバックに重点を置いています。</p>
+    </div>
+  </aside>
+</section>
 
 <script>
-  // ハンバーガー
-  const btn = document.getElementById('menuBtn');
-  const menu = document.getElementById('globalMenu');
-  function closeMenu(){ menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
-  btn.addEventListener('click', ()=>{
-    const open = menu.classList.toggle('open');
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-  document.addEventListener('click', (e)=>{ if(!menu.contains(e.target) && !btn.contains(e.target)) closeMenu(); });
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
+/* ヘッダーメニュー（共通） */
+const btn = document.getElementById('menuBtn');
+const menu = document.getElementById('globalMenu');
+function closeMenu(){ menu.classList.remove('open'); btn?.setAttribute('aria-expanded','false'); }
+btn?.addEventListener('click', ()=>{ const open = menu.classList.toggle('open'); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+document.addEventListener('click', (e)=>{ if(!menu.contains(e.target) && !btn.contains(e.target)) closeMenu(); });
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
 
-  // ===== サイドの「中央より遅い」スクロール演出 =====
-  // スクロール量に対して 0.3〜0.45倍だけY移動させる
-  const sideCards = document.querySelectorAll('.side-card');
-  let lastY = 0, ticking = false;
-  function onScroll(){
-    lastY = window.scrollY || window.pageYOffset;
-    if(!ticking){
-      window.requestAnimationFrame(()=>{
-        sideCards.forEach((card, i)=>{
-          const factor = i % 2 ? 0.45 : 0.3; // 交互に少し係数を変えるとリズムが出る
-          card.style.transform = `translateY(${lastY * factor}px)`;
-        });
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }
-  window.addEventListener('scroll', onScroll, {passive:true});
-  onScroll(); // 初期位置反映
+/* ===== 中央：作品切替（上下ボタン + ホイール） ===== */
+const projects = [...document.querySelectorAll('.proj')];
+const infos    = [...document.querySelectorAll('.left .info')];
+const up   = document.querySelector('.vbtn.up');
+const down = document.querySelector('.vbtn.down');
+let idx = 0;
+function show(i){
+  idx = (i + projects.length) % projects.length;
+  projects.forEach((p,k)=> p.classList.toggle('active', k===idx));
+  infos.forEach((f,k)=> f.classList.toggle('active', k===idx));
+}
+up.addEventListener('click',   ()=> show(idx-1));
+down.addEventListener('click', ()=> show(idx+1));
+// ホイールでも切替（中央枠の上だけ）
+document.getElementById('mid').addEventListener('wheel', (e)=>{
+  if(e.deltaY>0) show(idx+1); else show(idx-1);
+},{passive:true});
+
+/* ===== 右：Scratch 自動ループ + ▶ ◀ ===== */
+const sCards = [...document.querySelectorAll('.s-card')];
+const sprev = document.querySelector('.hbtn.prev');
+const snext = document.querySelector('.hbtn.next');
+let s = 0, timer;
+const DUR = 4000; // 切替間隔（ms）
+function cycle(){
+  sCards.forEach((c,i)=> c.classList.toggle('active', i===s));
+  timer = setTimeout(()=>{ s = (s+1)%sCards.length; cycle(); }, DUR);
+}
+cycle();
+function manual(dir){
+  clearTimeout(timer);
+  s = (s + dir + sCards.length) % sCards.length;
+  cycle();
+}
+sprev.addEventListener('click', ()=> manual(-1));
+snext.addEventListener('click', ()=> manual(+1));
+document.querySelector('.scroller').addEventListener('mouseenter', ()=> clearTimeout(timer));
+document.querySelector('.scroller').addEventListener('mouseleave', ()=> cycle());
 </script>
 </body>
 </html>
+
+
+
