@@ -20,7 +20,7 @@
   /* ===== 上段：イラスト帯（画面上1/3） ===== */
   .hero-illust{
     position:relative;
-    height:32vh; min-height:260px;
+    height:26vh; min-height:240px;
     display:flex; align-items:flex-end;
     isolation:isolate; overflow:hidden;
   }
@@ -44,6 +44,12 @@
     width:38vw; height:28vw; left:-16vw; bottom:-10vw; border-radius:32px;
     transform:rotate(-8deg);
   }
+  /*リンク*/
+  .illust-link {
+    text-align: right;
+    margin-bottom: 10px;
+  }
+
   /* 右からセンターまでくる帯 */
   .illust-band{
     margin-left:auto; margin-right:clamp(16px,6vw,80px);
@@ -183,12 +189,15 @@
 <!-- 上段：イラスト帯 -->
 <section class="hero-illust">
   <div class="title">CONTENTS</div>
+  <div class="illust-link">
+    <a class="more" href="images/illust.pdf" target="_blank" rel="noopener">
+    ILLUSTRATION PORTFOLIO <i class="fa-solid fa-angle-right"></i>
+    </a>
+  </div>
   <div class="illust-band">
     <div class="illust-row">
       <img src="images/illust1.jpg" alt=""><img src="images/illust2.jpg" alt=""><img src="images/illust3.jpg" alt="">
-      <a class="more" href="YOUR_ILLUST_PORTFOLIO_URL" target="_blank" rel="noopener">
-        ILLUSTRATION PORTFOLIO <i class="fa-solid fa-angle-right"></i>
-      </a>
+      <span clas="illust-title">ILLUSTRATION GALLERY</span>
     </div>
   </div>
 </section>

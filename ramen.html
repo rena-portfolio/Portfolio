@@ -3,12 +3,21 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="common.css">
 <title>Ramen Game – Details</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   :root{
-    --max: 1200px;
+    --max: 1500px;
     --gap: 24px;
+    --bg: #F5C6AA;
+    --accent: #fda829;
+    
+    --hero-h: 38vh;        /* 帯の高さ：32〜45vh で好みへ */
+    --blob-size: 760px;    /* 図形の直径：600〜900px など */
+    --blob-shift: 320px;   /* 画面外へのはみ出し量 */
+    --blob-color: 255,140,90; /* ピンク寄りのオレンジ (R,G,B) */
+    --blob-alpha: .28;     /* 図形の濃さ */
   }
 
   body{
@@ -17,17 +26,18 @@
 
   /* 3カラム */
   .grid{
-    max-width:var(--max); margin:0 auto; padding:0 16px 64px;
+    max-width:var(--max); margin:0 auto; margin-top: 48px; padding:0 16px 64px;
     display:grid; gap:var(--gap);
     grid-template-columns: repeat(3, 1fr);
   }
   .card{
-    background:#fff; border:1px solid rgba(0,0,0,.08);
+    background:#F8E2CF; border:1px solid rgba(0,0,0,.08);
     border-radius:16px; box-shadow:0 10px 28px rgba(0,0,0,.07);
+    min-height: 680px;
     overflow:hidden; display:flex; flex-direction:column;
   }
   .media{
-    position:relative; background:linear-gradient(135deg,#f0eee7,#e9e5da);
+    position:relative; background:linear-gradient(135deg,#f0eae7,#FDF6F0);
     aspect-ratio:16/9; border-bottom:1px solid rgba(0,0,0,.06);
     display:grid; place-items:center;
   }
@@ -47,6 +57,61 @@
   .btn:hover{ filter:brightness(.96); transform:translateY(-1px); }
   .btn.accent{ background:var(--accent); color:#fff; }
   .btn.ghost{ border:2px solid var(--accent); color:var(--accent); }
+
+.site-header {
+  background: #FDF6F0;
+}
+
+.ramen-hero{
+  position: relative;
+  isolation: isolate;
+  height: 18vh;         /* 32〜42vh で高さ調整 */
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  /* ほんのり温かい生成り×グレーのレイヤ */
+  background: #FCD8D4;
+} 
+
+
+.ramen-hero .hero-inner{
+  text-align: center;
+  max-width: 900px;
+  padding: 0 16px;
+}
+
+.ramen-hero h1{
+  font-weight: 800;
+  letter-spacing: .02em;
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  margin: 0 0 8px;
+}
+
+.ramen-hero .lead{
+  margin-top: 20px;
+  font-size: clamp(.85rem, 2.1vw, 0.98rem);
+  line-height: 1.7;
+  opacity: .9;
+}
+
+.hero .backline{
+  margin-top: 16px;   /* タイトルとリードから少し下げる */
+}
+
+.hero .back{
+  display: inline-block;
+  font-size: .9rem;
+  color: var(--ink, #333);
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity .2s;
+}
+
+.hero .back:hover{
+  opacity: 1;
+}
+
 
   /* レスポンシブ */
   @media (max-width: 980px){ .grid{ grid-template-columns: 1fr 1fr; } }
@@ -69,16 +134,23 @@
   </header>
 
   <!-- ページタイトル -->
-  <section class="hero">
-    <div>
-      <h1>ラーメン制作ゲーム – 詳細</h1>
-      <div class="sub">Scratch / Unity / Java の3つのアプローチで同テーマを実装</div>
-    </div>
-  </section>
+<section class="hero ramen-hero">
+  <div class="hero-inner">
+    <!-- 追加：タイトル帯のチップ装飾 -->
+    <div class="chips" aria-hidden="true"><span></span><span></span><span></span></div>
 
-  <div class="backline">
-    <a class="back" href="contents.html"><i class="fa-solid fa-arrow-left"></i> Contentsに戻る</a>
+    <h1>ラーメン制作マニュアル – Details</h1>
+    <p class="lead">
+      Scratchは素早い検証、Unityは表現の拡張、Javaはロジックの設計の学習を目的として、3つの異なるアプローチで制作。<br>
+      「多様なレシピを覚える負担」 「練習で作ったドリンクを捨てるもったいなさ」<br>
+      飲食アルバイト時代に感じた課題をもとに、学びを楽しく効率化するマニュアルアプリを形にしました。
+    </p>
+    <div class="backline">
+      <a class="back" href="contents.html"><i class="fa-solid fa-arrow-left"></i> Contentsに戻る</a>
+    </div>
   </div>
+</section>
+
 
   <!-- 3カラム -->
   <main class="grid">
@@ -139,13 +211,20 @@
   </main>
 
 <script>
-  // ヘッダーメニュー
+    // ハンバーガー開閉
   const btn = document.getElementById('menuBtn');
   const menu = document.getElementById('globalMenu');
   function closeMenu(){ menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
-  btn.addEventListener('click', ()=>{ const open = menu.classList.toggle('open'); btn.setAttribute('aria-expanded', open ? 'true' : 'false');});
-  document.addEventListener('click', (e)=>{ if(!menu.contains(e.target) && !btn.contains(e.target)) closeMenu(); });
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
+  btn.addEventListener('click', ()=>{
+    const open = menu.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', (e)=>{
+    if(!menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeMenu();
+  });
 </script>
 </body>
 </html>
