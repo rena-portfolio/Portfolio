@@ -24,8 +24,8 @@
     --hex-bottom: -10%;
     --hex-rotate: -8deg;
 
-    /* コンテンツ幅（中央三分の一イメージ） */
-    --content-max: 640px;
+    /* コンテンツ幅（中央三分の一イメージだと640px） */
+    --content-max: 1000px;
   }
 
   body{
@@ -83,27 +83,32 @@
   /* ===== 中央コンテンツ（中央三分の一イメージ） ===== */
   .about-card{
     position: relative; z-index: 2;
-    width: min(var(--content-max), 90vw);
+    max-width: 80%;
     text-align: center;
   }
   h1{
-    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    font-size: clamp(2.5rem, 4.5vw, 3.0rem);
     font-weight: 800; letter-spacing: .02em;
     margin-bottom: 16px;
   }
   .avatar{
-    width: 160px; height: 160px;
+    width: 200px; height: 200px;
     border-radius: 50%;
     object-fit: cover; object-position: center;
     background: linear-gradient(#eee, #ddd);
     display: inline-block;
     box-shadow: 0 8px 24px rgba(0,0,0,.08);
-    margin-bottom: 14px;
+    margin-bottom: 20px;
   }
   .intro{
-    font-size: clamp(0.98rem, 1.6vw, 1.05rem);
-    line-height: 1.85;
-    max-width: 56ch;
+    font-size: clamp(0.90rem, 1.6vw, 0.97rem);
+    line-height: 1.65;
+    margin: 0 auto;
+    opacity: .95;
+    margin-bottom: 24px;
+  }
+  .intro2{
+    font-size: 0.75rem;
     margin: 0 auto;
     opacity: .95;
   }
@@ -140,11 +145,19 @@
     <!-- 中央コンテンツ -->
     <section class="about-card">
       <h1>ABOUT</h1>
-      <!-- ここにご自身のアイコン画像を置き換えてください -->
       <img class="avatar" src="images/icon.jpg" alt="プロフィール写真">
       <p class="intro">
-        ここに自己紹介テキストを入れてください。専門分野、得意領域、制作スタイル、使用ツールなど。
-        文章量は 3〜6 行程度に収めると、中央のまとまり感と可読性が上がります。
+        1998年秋田県生まれ。<br>
+        京都芸術大学通信教育部 文化コンテンツ創造学科イラストレーションコースに在籍。<br>
+        入学以前は玉川大学工学部にてプログラミングを学び、現在はイラストとデジタル制作を中心に活動している。<br><br>
+
+        <!-- 得意分野はゲーム要素を取り入れたコンテンツ制作とイラスト制作。<br> -->
+        明るく親しみやすい表現を意識しながら、見る人が楽しめる作品づくりを心がけている。<br>
+        趣味はSNSへのイラスト投稿、体を動かすこと。<br>
+      </p>
+      <p class="intro2">
+        使用ソフト：VS code、 Eclipse、Unity、Clip Studio Paint など<br>
+                   アイコンはIllustratorを使用。
       </p>
     </section>
   </main>
