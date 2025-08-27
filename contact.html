@@ -125,7 +125,7 @@
         <a href="https://github.com/rena-portfolio" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
       </div>
 
-      <form action="#" method="post">
+      <form id="contactForm" action="#" method="post">
         <div>
           <label for="name">Name</label>
           <input id="name" name="name" type="text" required>
@@ -163,30 +163,34 @@
   document.addEventListener('keydown', (e)=>{
     if(e.key === 'Escape') closeMenu();
   });
+</script>
 
+<script>
   //送信ボタンを押した後
-  const form = document.getElementById('contactForm');
-  const notice = document.getElementById('formNotice');
-  const sendBtn = document.getElementById('sendBtn');
+  document.addEventListener('DOMContentLoad', () => {
+    const form = document.getElementById('contactForm');
+    const notice = document.getElementById('formNotice');
+    const sendBtn = document.getElementById('sendBtn');
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault(); // 実際の送信を止める
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // 実際の送信を止める
 
-    // ボタンの軽い演出（任意）
-    sendBtn.disabled = true;
-    const originalText = sendBtn.textContent;
-    sendBtn.textContent = 'Sending...';
-    setTimeout(() => {
-      sendBtn.textContent = originalText;
-      sendBtn.disabled = false;
-    }, 600);
+      // ボタンの軽い演出（任意）
+      sendBtn.disabled = true;
+      const originalText = sendBtn.textContent;
+      sendBtn.textContent = 'Sending...';
+      setTimeout(() => {
+        sendBtn.textContent = originalText;
+        sendBtn.disabled = false;
+      }, 600);
 
-    // メッセージ表示
-    notice.textContent = '送信テストモードです。実際には送信されていません。';
-    notice.style.display = 'block';
+      // メッセージ表示
+      notice.textContent = '送信テストモードです。実際には送信されていません。';
+      notice.style.display = 'block';
 
-    // 入力内容をクリア（不要なら消してOK）
-    form.reset();
+      // 入力内容をクリア（不要なら消してOK）
+      form.reset();
+    });
   });
 </script>
 </body>
