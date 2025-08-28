@@ -9,11 +9,11 @@
 <style>
   :root{
     --bg:#fcfaf2; --ink:#333; --accent:#ff7e00; --header-h:64px;
-    --max:1300px; --gap:28px;
+    --max:1500px; --gap:28px;
     /* 下段 3カラム幅 */
-    --col-left:1.1fr;   /* 説明 */
+    --col-left: 1fr;   /* 説明 */
     --col-mid:  1.3fr;  /* メイン */
-    --col-right:1.1fr;  /* Scratch */
+    --col-right:1.5fr;  /* Scratch */
   }
   body{ background:var(--bg); color:var(--ink); }
 
@@ -95,7 +95,7 @@
   }
 
   /* 左：説明（作品ごとに連動切替） */
-  .left{ position:relative; min-height:540px; }
+  .left{ position:relative; min-height:580px; }
   .info{
     position:absolute; inset:0;
     background:#fff; border:1px solid rgba(0,0,0,.08);
@@ -107,7 +107,7 @@
   .info h3{ margin-bottom:23px; font-size:1.08rem; border-bottom:2px solid rgba(0,0,0,.5); }
 
   /* 中央：メインカード（上下ボタンは外側・薄い） */
-  .mid{ position:relative; min-height:540px; margin-right: 50px; }
+  .mid{ position:relative; min-height:580px; }
   .proj{
     position:absolute; inset:0;
     background:#fff; border:1px solid rgba(0,0,0,.08);
@@ -157,20 +157,18 @@
 .right{
   display: grid;
   grid-template-rows: auto auto;
-  gap: 16px;
+  gap: 10px;
   justify-self: stretch;
+   margin-left: 30px;
 }
 
-/* 上段：左(1.2) : 右(1.0) */
+/* 上段 */
 .rtop{
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1.5fr 2fr;
   gap: 16px;
   align-items: stretch;
 }
-
-/* 下段：1列フル幅 */
-.rbottom{ display: block; }
 
 /* ===== Scratchスライダー（土台） ===== */
 .scratch-mini{
@@ -185,22 +183,22 @@
 
 /* カード重ね表示（activeのみ表示） */
 .s-card{
-  position:absolute; inset:0;
+  position:absolute; inset:0; aspect-ratio:4/3;
   border-radius:12px; border:1px solid rgba(0,0,0,.06);
   background:#fff; box-shadow:0 6px 18px rgba(0,0,0,.06);
   opacity:0; pointer-events:none; transition:opacity .35s ease;
 }
 .s-card.active{ opacity:1; pointer-events:auto; }
 
-/* ご指定の見た目 */
+/* 見た目 */
 .s-card img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:12px; }
 .s-card.theme-amber{ box-shadow:inset 0 0 0 10px rgba(255,224,139,.55); }
 .s-card.theme-blue { box-shadow:inset 0 0 0 10px rgba(169,199,223,.55); }
 .s-card.theme-coral{ box-shadow:inset 0 0 0 10px rgba(255,184,161,.55); }
 .s-caption{
-  position:absolute; left:14px; right:14px; bottom:14px;
-  background:rgba(255,255,255,.88); border:1px solid rgba(0,0,0,.06);
-  border-radius:10px; padding:8px 10px; font-weight:700;
+  position:absolute; left:14px; right:14px; bottom:-33px;
+  background:rgba(196, 193, 193, 0.5); border:1px solid rgba(0,0,0,.06);
+  border-radius:8px; padding:3px 4px; font-weight:500;
 }
 
 /* ◀▶ ボタン（位置は外側に薄く） */
@@ -222,13 +220,14 @@
 .scr-reason h3{ margin:0 0 8px; font-size:1.02rem; }
 
 /* ===== 下段の Unity ボックス（動画＋説明を同じカード内） ===== */
+.rbottom{ display:block; }
 .unity-card{
   background:#fff; border:1px solid rgba(0,0,0,.08);
   border-radius:16px; box-shadow:0 8px 22px rgba(0,0,0,.06);
   padding:14px;
 }
 .u-media{
-  width:100%; aspect-ratio:16/9;
+  width:60%; aspect-ratio:4/3;
   border-radius:12px; overflow:hidden;
   border:1px solid rgba(0,0,0,.08);
   background:linear-gradient(135deg,#f0eee7,#e9e5da);
@@ -340,7 +339,7 @@
     <article class="proj active" data-idx="0">
       <h2>ラーメン制作マニュアル</h2>
       <div class="frame">
-        <video class="media" autoplay loop muted playsinline>
+        <video class="media" autoplay loop muted playsinline preload="metadata" poster="images/scratch-poster.jpg">
         <source src="videos/ramen_scratch.mp4" type="video/mp4">お使いのブラウザは動画再生に対応していません
         </video>
         <div class="r-caption">Scratch</div>
@@ -364,33 +363,36 @@
 
   <!-- 右：Scratch自動ループ＋薄い▶ボタン＋固定説明 -->
   <!-- 上段  -->
-  <section class="rtop"></section>
-  <aside class="scr-reason">
-    <!-- 左：Scratch GIFスライダー（既存のをそのまま） -->
-    <section class="scratch-mini" id="scratchMini">
-      <div class="scroller mini" aria-label="Scratch作品スライドショー">
-        <article class="s-card theme-amber active">
-          <img src="images/shooting_game_demo.gif" alt="">
-          <div class="s-caption">シューティングゲーム</div>
-        </article>
-        <article class="s-card theme-blue">
-          <img src="images/grow.gif" alt="">
-          <div class="s-caption">育成ゲーム</div>
-        </article>
-        <article class="s-card theme-coral">
-          <img src="images/catch.gif" alt="">
-          <div class="s-caption">キャッチゲーム</div>
-        </article>
-      </div>
-      <button class="hbtn prev" aria-label="前"><span>◀</span></button>
-      <button class="hbtn next" aria-label="次"><span>▶</span></button>
-    </section>
-
-    <!-- 右：Scratch制作の経緯（ボックス外・別列） -->
+  <section class="right">
+  <section class="rtop">
+    <!-- 左：Scratch制作の経緯 -->
     <aside class="scr-reason">
-      <h3>scratchゲーム（タイトル）</h3>
-      <p>短期のアイデア検証と操作感の試作を目的に制作。即時フィードバックと反復を重視しています。実際のゲームの様子を早送りでご覧いただけます。</p>
+      <h3>scratchゲーム</h3>
+      <p>短期のアイデア検証と操作感の試作を目的に制作。即時フィードバックと反復を重視しています。<br>実際のゲームの様子を早送りでご覧いただけます。</p>
     </aside>
+
+    <article class="scratch-card">
+      <!-- 左：Scratch GIFスライダー（既存のをそのまま） -->
+      <section class="scratch-mini" id="scratchMini">
+        <div class="scroller mini" aria-label="Scratch作品スライドショー">
+          <article class="s-card theme-amber active">
+            <img src="images/shooting_game_demo.gif" alt="">
+            <div class="s-caption">シューティングゲーム</div>
+          </article>
+          <article class="s-card theme-blue">
+            <img src="images/grow.gif" alt="">
+            <div class="s-caption">育成ゲーム</div>
+          </article>
+          <article class="s-card theme-coral">
+            <img src="images/catch.gif" alt="">
+            <div class="s-caption">キャッチゲーム</div>
+          </article>
+        </div>
+        
+        <button class="hbtn prev" aria-label="前"><span>◀</span></button>
+        <button class="hbtn next" aria-label="次"><span>▶</span></button>
+    </section>  
+    </article>
   </section>
 
   <!-- 下段：1列フル幅（同じボックス内に動画＋説明） -->
@@ -402,13 +404,12 @@
           <source src="videos/LostPromise.mp4" type="video/mp4">
         </video>
       </div>
-      <p class="u-desc">オリジナルノベルゲームを制作中です。<br>タイトル画面、メニュー画面、セーブ画面</p>
+      <p class="u-desc">オリジナルノベルゲームを制作中です。タイトル画面、メニュー画面、セーブ画面<br>
+                        制作ツール: Unity　／　イメージイラスト: ChatGPT</p>
     </article>
   </section>
-</aside>
   </section>
-</aside>
-</section>
+
 
 <script>
 /* ヘッダーメニュー（共通） */
