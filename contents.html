@@ -241,17 +241,16 @@
   @media (max-width: 1100px){
   /* ===== 追加したい新処理 ===== */
   .stage{
-    display: grid;
-    grid-template-columns: 1fr; /* 3カラム→1カラム */
-    grid-auto-flow: row;
-    gap: 20px;
-    margin: 0 auto;
+    display: block;
+    grid-template-columns: 1fr; /* 1カラム */
     padding: 0 16px;
   }
   .left, .mid, .right{
-    width: 100%;
-    justify-self: stretch;
-    min-height: auto;  /* ← 高さ固定は外して自然に */
+    display:block;
+    width:100%;
+    position: static !important;   
+    float: none !important;       
+    margin: 0 0 24px 0;
   }
 
   /* ===== 既存処理で必要なもの ===== */
@@ -364,9 +363,9 @@
   </section>
 
   <!-- 右：Scratch自動ループ＋薄い▶ボタン＋固定説明 -->
-  <aside class="right">
-  <!-- 上段：2列 -->
-  <section class="rtop">
+  <!-- 上段  -->
+  <section class="rtop"></section>
+  <aside class="scr-reason">
     <!-- 左：Scratch GIFスライダー（既存のをそのまま） -->
     <section class="scratch-mini" id="scratchMini">
       <div class="scroller mini" aria-label="Scratch作品スライドショー">
