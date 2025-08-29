@@ -60,7 +60,7 @@
   }
   .social a:hover{ background:rgba(0,0,0,.05); color:var(--accent); transform:translateY(-1px); }
 
-  /* フォーム（案2：下線タイプ） */
+  /* フォーム */
   form{ display:flex; flex-direction:column; gap:16px; }
   label{ font-size:.9rem; opacity:.85; }
   input, textarea{
@@ -80,18 +80,22 @@
   }
   button:hover{ filter:brightness(.96); transform:translateY(-1px); }
 
+  /* 送信後の注意メッセージ */
+#formNotice{
+  margin-top:12px; padding:12px 14px;
+  border:1px solid rgba(0,0,0,.12); border-radius:10px;
+  background:#fff7ef; color:#6a3b00; line-height:1.75;
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+  opacity:0; transform: translateY(-4px);
+  transition: opacity .25s, transform .25s;
+}
+#formNotice.show{ opacity:1; transform:none; }
+
   @media (max-width:680px){
     .bg-circle.left{ left:-200px; bottom:-120px; width:420px; height:420px; opacity:.75; }
     .bg-circle.right{ right:-160px; width:340px; height:340px; opacity:.26; }
   }
 
-  .form-notice{
-  margin-top:12px;
-  padding:10px 12px;
-  border-radius:10px;
-  background:rgba(0,0,0,.04);
-  font-size:.95rem;
-}
 </style>
 </head>
 <body>
@@ -166,32 +170,27 @@
 </script>
 
 <script>
-  //送信ボタンを押した後
-  document.addEventListener('DOMContentLoad', () => {
-    const form = document.getElementById('contactForm');
-    const notice = document.getElementById('formNotice');
-    const sendBtn = document.getElementById('sendBtn');
+(function(){
+  const form = document.getElementById('contactForm');
+  if(!form) return;
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault(); // 実際の送信を止める
+  // 既存の p#formNotice を“メッセージ欄”として使う
+  const note = document.getElementById('formNotice');
 
-      // ボタンの軽い演出（任意）
-      sendBtn.disabled = true;
-      const originalText = sendBtn.textContent;
-      sendBtn.textContent = 'Sending...';
-      setTimeout(() => {
-        sendBtn.textContent = originalText;
-        sendBtn.disabled = false;
-      }, 600);
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();               // 送信しない
 
-      // メッセージ表示
-      notice.textContent = '送信テストモードです。実際には送信されていません。';
-      notice.style.display = 'block';
+    const btn = form.querySelector('button[type="submit"]');
+    if(btn){ btn.disabled = true; btn.textContent = 'send（デモ）'; }
 
-      // 入力内容をクリア（不要なら消してOK）
-      form.reset();
-    });
+    // メッセージ表示
+    if(note){
+      note.textContent = 'メッセージは送信されていません（デモ表示）';
+      note.style.display = 'block';
+      note.classList.add('show');
+    }
   });
+})();
 </script>
 </body>
 </html>
